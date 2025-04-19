@@ -1,5 +1,5 @@
 
-import { Facebook, Linkedin, MessageSquare, Whatsapp } from "lucide-react";
+import { Facebook, Linkedin, MessageSquare } from "lucide-react";
 import { Platform } from "../types";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,7 @@ export const PlatformBadge = ({ platform, className, showLabel = false, size = 1
       case 'linkedin':
         return <Linkedin size={size} />;
       case 'whatsapp':
-        return <Whatsapp size={size} />;
+        return <MessageSquare size={size} />; // Changed from Whatsapp to MessageSquare
       default:
         return <MessageSquare size={size} />;
     }

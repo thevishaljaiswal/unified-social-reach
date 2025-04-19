@@ -8,7 +8,7 @@ import { ConversationList } from "@/components/ConversationList";
 import { ConversationView } from "@/components/ConversationView";
 import { EmptyConversation } from "@/components/EmptyConversation";
 import { PlatformBadge } from "@/components/PlatformBadge";
-import { Facebook, Inbox, Linkedin, Menu, Users, Whatsapp } from "lucide-react";
+import { Facebook, Inbox, Linkedin, Menu, MessageSquare, Users } from "lucide-react"; // Changed Whatsapp to MessageSquare
 import { useToast } from "@/hooks/use-toast";
 import { UnreadBadge } from "@/components/UnreadBadge";
 
@@ -137,7 +137,7 @@ const Index = () => {
               )}
             </Button>
             <Button variant="ghost" size="icon" className="relative">
-              <Whatsapp className="h-5 w-5 text-whatsapp" />
+              <MessageSquare className="h-5 w-5 text-whatsapp" /> {/* Changed from Whatsapp to MessageSquare */}
               {getPlatformUnreadCount('whatsapp') > 0 && (
                 <UnreadBadge count={getPlatformUnreadCount('whatsapp')} className="absolute -top-1 -right-1" />
               )}
