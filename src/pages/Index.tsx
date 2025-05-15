@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { agents, conversations, messages } from "../data/mockData";
@@ -76,6 +75,31 @@ const Index = () => {
     toast({
       title: "Message Sent",
       description: `Message sent on ${conversation.platform}`,
+    });
+  };
+
+  const handleStatusChange = (conversationId: string, status: 'open' | 'pending' | 'closed') => {
+    const updatedConversations = conversationsList.map((c) => {
+      if (c.id === conversationId) {
+        return {
+          ...c,
+          status,
+        };
+      }
+      return c;
+    });
+    
+    setConversationsList(updatedConversations);
+    
+    const statusMessages = {
+      open: 'Conversation marked as Open',
+      pending: 'Conversation marked as Pending',
+      closed: 'Conversation marked as Closed',
+    };
+    
+    toast({
+      title: 'Status Updated',
+      description: statusMessages[status],
     });
   };
 
@@ -160,6 +184,7 @@ const Index = () => {
                 messages={conversationMessages}
                 agents={agents}
                 onSendMessage={handleSendMessage}
+                onStatusChange={handleStatusChange}
               />
             ) : (
               <EmptyConversation />

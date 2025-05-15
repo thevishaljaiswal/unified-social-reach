@@ -10,6 +10,7 @@ interface ConversationViewProps {
   messages: Message[];
   agents: Agent[];
   onSendMessage: (conversationId: string, content: string) => void;
+  onStatusChange?: (conversationId: string, status: 'open' | 'pending' | 'closed') => void;
 }
 
 export const ConversationView = ({
@@ -17,6 +18,7 @@ export const ConversationView = ({
   messages,
   agents,
   onSendMessage,
+  onStatusChange,
 }: ConversationViewProps) => {
   const agentOptions = agents.map((agent) => ({
     value: agent.id,
@@ -27,11 +29,18 @@ export const ConversationView = ({
     onSendMessage(conversation.id, content);
   };
 
+  const handleStatusChange = (status: 'open' | 'pending' | 'closed') => {
+    if (onStatusChange) {
+      onStatusChange(conversation.id, status);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       <ConversationHeader
         conversation={conversation}
         agents={agentOptions}
+        onStatusChange={handleStatusChange}
       />
       <MessageList messages={messages} />
       <MessageInput
