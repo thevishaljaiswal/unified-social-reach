@@ -161,7 +161,7 @@
                    <SelectValue placeholder="Select agent" />
                  </SelectTrigger>
                  <SelectContent>
-                   <SelectItem value="">Unassigned</SelectItem>
+                   <SelectItem value="unassigned">Unassigned</SelectItem>
                    {agents.map((agent) => (
                      <SelectItem key={agent.id} value={agent.id}>
                        {agent.name}
