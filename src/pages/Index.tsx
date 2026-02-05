@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+ import { Button } from "@/components/ui/button";
+ import { NewTicketDialog } from "@/components/NewTicketDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { agents, conversations, messages } from "../data/mockData";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { ConversationList } from "@/components/ConversationList";
 import { ConversationView } from "@/components/ConversationView";
 import { EmptyConversation } from "@/components/EmptyConversation";
 import { PlatformBadge } from "@/components/PlatformBadge";
-import { Facebook, Inbox, Linkedin, Menu, MessageSquare, Users } from "lucide-react"; // Changed Whatsapp to MessageSquare
+ import { Facebook, Inbox, Linkedin, Menu, MessageSquare, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { UnreadBadge } from "@/components/UnreadBadge";
 
@@ -40,7 +41,7 @@ const Index = () => {
     setConversationsList(updatedConversations);
   };
 
-  const handleSendMessage = (conversationId: string, content: string) => {
+ const handleSendMessage = (conversationId: string, content: string, attachments?: import("@/types").Attachment[]) => {
     const conversation = conversationsList.find((c) => c.id === conversationId);
     
     if (!conversation) return;
@@ -54,6 +55,7 @@ const Index = () => {
       isAgent: true,
       platform: conversation.platform,
       read: true,
+       attachments,
     };
     
     // Add the new message
@@ -79,7 +81,8 @@ const Index = () => {
   };
 
   const handleStatusChange = (conversationId: string, status: 'open' | 'pending' | 'closed') => {
-    const updatedConversations = conversationsList.map((c) => {
+     setConversationsList((prev) =>
+       prev.map((c) => {
       if (c.id === conversationId) {
         return {
           ...c,
@@ -87,10 +90,9 @@ const Index = () => {
         };
       }
       return c;
-    });
-    
-    setConversationsList(updatedConversations);
-    
+       })
+     );
+ 
     const statusMessages = {
       open: 'Conversation marked as Open',
       pending: 'Conversation marked as Pending',
@@ -103,6 +105,17 @@ const Index = () => {
     });
   };
 
+   const handleCreateTicket = (conversation: Conversation, initialMessage: Message) => {
+     setConversationsList((prev) => [conversation, ...prev]);
+     setMessagesList((prev) => [...prev, initialMessage]);
+     setActiveConversationId(conversation.id);
+ 
+     toast({
+       title: "Ticket Created",
+       description: `New ticket created for ${conversation.user.name} on ${conversation.platform}`,
+     });
+   };
+ 
   const activeConversation = conversationsList.find(
     (c) => c.id === activeConversationId
   );
@@ -135,7 +148,7 @@ const Index = () => {
             <Users className="mr-2 h-4 w-4" />
             Agents
           </Button>
-          <Button size="sm">New Ticket</Button>
+           <NewTicketDialog agents={agents} onCreateTicket={handleCreateTicket} />
         </div>
       </header>
       
