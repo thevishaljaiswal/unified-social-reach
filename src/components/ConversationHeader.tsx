@@ -2,20 +2,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Conversation } from "@/types";
+ import { Conversation, Attachment } from "@/types";
 import { CheckCircle, Clock, Inbox, MoreHorizontal, Phone, UserPlus, XCircle } from "lucide-react";
 import { AgentAvatar } from "./AgentAvatar";
 import { PlatformBadge } from "./PlatformBadge";
 import { UserAvatar } from "./UserAvatar";
 import { cn } from "@/lib/utils";
+ import { NewMessageDialog } from "./NewMessageDialog";
 
 interface ConversationHeaderProps {
   conversation: Conversation;
   agents: { value: string; label: string }[];
   onStatusChange?: (status: 'open' | 'pending' | 'closed') => void;
+   onSendMessage?: (conversationId: string, content: string, attachments?: Attachment[]) => void;
 }
 
-export const ConversationHeader = ({ conversation, agents, onStatusChange }: ConversationHeaderProps) => {
+ export const ConversationHeader = ({ conversation, agents, onStatusChange, onSendMessage }: ConversationHeaderProps) => {
   const { user, platform, status, assignedTo } = conversation;
 
   const getStatusColor = (currentStatus: string) => {
@@ -68,6 +70,9 @@ export const ConversationHeader = ({ conversation, agents, onStatusChange }: Con
               ))}
             </SelectContent>
           </Select>
+           {onSendMessage && (
+             <NewMessageDialog conversation={conversation} onSendMessage={onSendMessage} />
+           )}
           <Button variant="outline" size="icon">
             <Phone className="h-4 w-4" />
           </Button>

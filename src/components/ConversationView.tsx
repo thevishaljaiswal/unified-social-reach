@@ -1,5 +1,5 @@
 
-import { Conversation, Message } from "@/types";
+ import { Conversation, Message, Attachment } from "@/types";
 import { ConversationHeader } from "./ConversationHeader";
 import { MessageInput } from "./MessageInput";
 import { MessageList } from "./MessageList";
@@ -9,7 +9,7 @@ interface ConversationViewProps {
   conversation: Conversation;
   messages: Message[];
   agents: Agent[];
-  onSendMessage: (conversationId: string, content: string) => void;
+   onSendMessage: (conversationId: string, content: string, attachments?: Attachment[]) => void;
   onStatusChange?: (conversationId: string, status: 'open' | 'pending' | 'closed') => void;
 }
 
@@ -29,6 +29,10 @@ export const ConversationView = ({
     onSendMessage(conversation.id, content);
   };
 
+   const handleSendMessageWithAttachments = (conversationId: string, content: string, attachments?: Attachment[]) => {
+     onSendMessage(conversationId, content, attachments);
+   };
+ 
   const handleStatusChange = (status: 'open' | 'pending' | 'closed') => {
     if (onStatusChange) {
       onStatusChange(conversation.id, status);
@@ -41,6 +45,7 @@ export const ConversationView = ({
         conversation={conversation}
         agents={agentOptions}
         onStatusChange={handleStatusChange}
+         onSendMessage={handleSendMessageWithAttachments}
       />
       <MessageList messages={messages} />
       <MessageInput
